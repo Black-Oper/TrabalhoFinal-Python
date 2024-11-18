@@ -1,14 +1,16 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
-from sklearn.metrics import accuracy_score, mean_squared_error
+from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
 import config
-from config import allowed_file, prepare_data, train_model
+from config import allowed_file
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from modelForm import ModelForm
-import numpy as np
 
 # Configuração do Flask
 app = Flask(__name__)
@@ -41,7 +43,7 @@ def upload_file():
 
             # Validação das colunas
             expected_columns = ['marca', 'modelo', 'ano', 'preco', 'quilometragem', 'cidade', 'estado', 'latitude', 'longitude']
-            if list(df.columns) != expected_columns:
+            if not set(expected_columns).issubset(df.columns):
                 flash('As colunas do arquivo não correspondem ao esperado.')
                 return redirect(request.url)
 
@@ -87,31 +89,46 @@ def analysis(filename):
     )
     fig.update_layout(mapbox_style="open-street-map")
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
-    map_html = os.path.join('templates', 'map.html')
-    fig.write_html(map_html, full_html=False, include_plotlyjs='cdn')
+    map_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
 
-    # Formulário e treinamento do modelo
     form = ModelForm()
     model_trained = False
-    score = {}
+    score = None
 
     if request.method == 'POST' and form.validate_on_submit():
-        X_train, X_test, y_train, y_test = prepare_data(df)
-        params = {}
+        # Remover linhas nulas
+        df = df.dropna()
+
+        df['marca'] = df['marca'].astype(str)
+        df['modelo'] = df['modelo'].astype(str)
+        df['cidade'] = df['cidade'].astype(str)
+        df['quilometragem'] = df['quilometragem'].astype(int)
+        df['estado'] = df['estado'].astype(str)
+        df['preco'] = df['preco'].astype(float)
+        df['ano'] = df['ano'].astype(int)
+
+        X = df[['marca', 'modelo', 'ano', 'quilometragem']]
+        y = df['preco']
+
+        X = pd.get_dummies(X, columns=['marca', 'modelo'])
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        param = form.param.data
 
         if form.model_type.data == 'Decision Tree':
-            params['max_depth'] = form.param.data
+            model = DecisionTreeRegressor(max_depth=param, random_state=42)
         elif form.model_type.data == 'KNN':
-            params['n_neighbors'] = form.param.data
+            model = KNeighborsRegressor(n_neighbors=param)
 
-        model = train_model(X_train, y_train, form.model_type.data, params)
+        model.fit(X_train, y_train)
+
         y_pred = model.predict(X_test)
 
-        acc = accuracy_score(y_test, y_pred)
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+        score = r2_score(y_test, y_pred)
+        print(f'R²: {score}')
 
         model_trained = True
-        score = {'accuracy': acc, 'rmse': rmse}
     else:
         if form.errors:
             flash(form.errors)
@@ -123,8 +140,10 @@ def analysis(filename):
         form=form,
         filename=filename,
         model_trained=model_trained,
-        score=score
+        score=score,
+        map_html=map_html
     )
+
 
 # Início do servidor
 if __name__ == '__main__':

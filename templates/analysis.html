@@ -15,7 +15,7 @@
     <img src="{{ url_for('static', filename=bar_chart_url2) }}" alt="Gráfico de Barras" class="img-fluid">
 
     <h2>Mapa Interativo - Localização dos Veículos</h2>
-    {% include 'map.html' %}
+    {{ map_html | safe }}
 
     <h2>Treinamento de Modelo</h2>
     <form method="POST">
@@ -35,8 +35,7 @@
 
     {% if model_trained %}
     <h3>Resultados do Modelo</h3>
-    <p>Acurácia: {{ score['accuracy'] }}</p>
-    <p>RMSE: {{ score['rmse'] }}</p>
+    <p>R²: {{ score }}</p>
     {% endif %}
 </div>
 </body>

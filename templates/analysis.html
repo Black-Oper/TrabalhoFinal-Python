@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Análise de Dados</title>
 </head>
-
 <body>
 <div class="container">
     <h1>Análise de Dados</h1>
 
     <h2>Gráfico de Barras - Distribuição por Marca</h2>
-    <img src="{{ url_for('static', filename='bar_chart.png') }}" alt="Gráfico de Barras" class="img-fluid">
+    <img src="{{ url_for('static', filename=bar_chart_url1) }}" alt="Gráfico de Barras" class="img-fluid">
+
+    <h2>Gráfico de Barras - Estados</h2>
+    <img src="{{ url_for('static', filename=bar_chart_url2) }}" alt="Gráfico de Barras" class="img-fluid">
 
     <h2>Mapa Interativo - Localização dos Veículos</h2>
     {% include 'map.html' %}
@@ -31,27 +33,11 @@
         </div>
     </form>
 
-    <h2>Re-Treinar Modelo</h2>
-    <form action="{{ url_for('retrain', filename=filename) }}" method="post">
-        <input type="submit" value="Re-Treinar Modelo com Dados Atuais" class="btn btn-warning">
-    </form>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div>
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-
     {% if model_trained %}
     <h3>Resultados do Modelo</h3>
-    <p>Acurácia: {{ score.acc }}</p>
-    <p>RMSE: {{ score.rmse }}</p>
+    <p>Acurácia: {{ score['accuracy'] }}</p>
+    <p>RMSE: {{ score['rmse'] }}</p>
     {% endif %}
-
 </div>
 </body>
 </html>

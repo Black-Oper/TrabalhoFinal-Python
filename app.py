@@ -3,14 +3,11 @@ from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
-import config
-from config import allowed_file
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from modelForm import ModelForm
 
 # Configuração do Flask
 app = Flask(__name__)
@@ -54,10 +51,36 @@ def upload_file():
     return render_template('upload.html')
 
 # Página de análise
+from flask import Flask, render_template, request, flash
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import r2_score
+from sklearn.preprocessing import StandardScaler
+
 @app.route('/analysis/<filename>', methods=['GET', 'POST'])
 def analysis(filename):
     filepath = os.path.join(app.config.get('UPLOAD_FOLDER', './uploads'), filename)
     df = pd.read_csv(filepath)
+    
+    df = df.dropna()
+
+    df['marca'] = df['marca'].astype(str)
+    df['modelo'] = df['modelo'].astype(str)
+    df['cidade'] = df['cidade'].astype(str)
+    df['quilometragem'] = df['quilometragem'].astype(int)
+    df['estado'] = df['estado'].astype(str)
+    df['preco'] = df['preco'].astype(float)
+    df['ano'] = df['ano'].astype(int)
+
+    # Normalizar a variável quilometragem
+    scaler = StandardScaler()
+    df['quilometragem'] = scaler.fit_transform(df[['quilometragem']])
 
     # Gráfico 1: Distribuição por Marca
     plt.figure(figsize=(10, 6))
@@ -96,35 +119,32 @@ def analysis(filename):
     score = None
 
     if request.method == 'POST' and form.validate_on_submit():
-        # Remover linhas nulas
-        df = df.dropna()
-
-        df['marca'] = df['marca'].astype(str)
-        df['modelo'] = df['modelo'].astype(str)
-        df['cidade'] = df['cidade'].astype(str)
-        df['quilometragem'] = df['quilometragem'].astype(int)
-        df['estado'] = df['estado'].astype(str)
-        df['preco'] = df['preco'].astype(float)
-        df['ano'] = df['ano'].astype(int)
-
+        # Preparação dos dados
         X = df[['marca', 'modelo', 'ano', 'quilometragem']]
         y = df['preco']
 
+        # One-hot encoding
         X = pd.get_dummies(X, columns=['marca', 'modelo'])
 
+        # Divisão dos dados
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
         param = form.param.data
 
         if form.model_type.data == 'Decision Tree':
-            model = DecisionTreeRegressor(max_depth=param, random_state=42)
-        elif form.model_type.data == 'KNN':
-            model = KNeighborsRegressor(n_neighbors=param)
+            # Usando GridSearchCV para encontrar a melhor profundidade
+            param_grid = {'max_depth': range(1, 21)}
+            grid_search = GridSearchCV(DecisionTreeRegressor(random_state=42), param_grid, cv=5)
+            grid_search.fit(X_train, y_train)
+            model = grid_search.best_estimator_
+        elif form.model_type.data == 'Random Forest':
+            model = RandomForestRegressor(n_estimators=100, random_state=42)
 
+        # Treinamento do modelo
         model.fit(X_train, y_train)
 
+        # Avaliação do modelo
         y_pred = model.predict(X_test)
-
         score = r2_score(y_test, y_pred)
         print(f'R²: {score}')
 
@@ -143,6 +163,10 @@ def analysis(filename):
         score=score,
         map_html=map_html
     )
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
 
 # Início do servidor

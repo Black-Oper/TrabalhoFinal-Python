@@ -11,23 +11,23 @@
     <h2>Gráfico de Barras - Distribuição por Marca</h2>
     <img src="{{ url_for('static', filename=bar_chart_url1) }}" alt="Gráfico de Barras" class="img-fluid">
 
-    <h2>Gráfico de Barras - Estados</h2>
+    <h2>Gráfico de Barras - Distribuição por Ano</h2>
     <img src="{{ url_for('static', filename=bar_chart_url2) }}" alt="Gráfico de Barras" class="img-fluid">
-
-    <h2>Mapa Interativo - Localização dos Veículos</h2>
-    {{ map_html | safe }}
 
     <h2>Treinamento de Modelo</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
         <div class="form-group">
-            {{ form.model_type.label }}
-            {{ form.model_type(class="form-control") }}
+            <label for="model_type">{{ form.model_type.label.text }}</label>
+            {{ form.model_type(class="form-control", id="model_type") }}
         </div>
         <div class="form-group">
-            {{ form.param.label }}
-            {{ form.param(class="form-control") }}
-            <small>Para Decision Tree, este é o 'max_depth'. Para Random Forest, este é o 'n_estimators'.</small>
+            <label for="param">{{ form.param.label.text }}</label>
+            {{ form.param(class="form-control", id="param") }}
+            <small>
+                Para Decision Tree, este é o 'max_depth'.
+                Para Random Forest e Gradient Boosting, este é o 'n_estimators'.
+            </small>
             {% for error in form.param.errors %}
                 <span class="text-danger">{{ error }}</span>
             {% endfor %}
@@ -39,8 +39,14 @@
 
     {% if model_trained %}
     <h3>Resultados do Modelo</h3>
-    <p>R²: {{ score }}</p>
+    <p>R²: {{ metrics['R2'] | round(4) }}</p>
+    <p>MSE: {{ metrics['MSE'] | round(4) }}</p>
+    <p>MAE: {{ metrics['MAE'] | round(4) }}</p>
+    <p>Média R² (Validação Cruzada): {{ metrics['CV R2 Mean'] | round(4) }}</p>
     {% endif %}
+
+    <!-- analysis.html -->
+    <a href="{{ url_for('predict') }}" class="btn btn-primary">Ir para Previsão</a>
 </div>
 </body>
 </html>

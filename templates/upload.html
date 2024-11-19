@@ -2,28 +2,20 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Upload de Arquivo CSV</title>
+    <title>Upload de Arquivo</title>
 </head>
-
 <body>
-<div>
-    <h1>Upload de Arquivo CSV</h1>
-    <form action="" method="post" enctype="multipart/form-data">
+<div class="container">
+    <h1>Upload de Dados</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
         <div class="form-group">
-            <input type="file" name="file" accept=".csv">
+            <input type="file" name="file" class="form-control">
         </div>
-        <input type="submit" value="Upload">
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
     </form>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div>
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
 </div>
 </body>
 </html>

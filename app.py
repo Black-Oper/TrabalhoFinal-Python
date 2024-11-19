@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask_wtf import FlaskForm
+from wtforms import SelectField, SubmitField, IntegerField
+from wtforms.validators import DataRequired
 from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import StandardScaler
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,9 +18,27 @@ app = Flask(__name__)
 app.secret_key = 'mister-picanha'
 
 # Configurações de diretórios
-app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
-app.config['MODEL_FOLDER'] = config.MODEL_FOLDER
-app.config['ALLOWED_EXTENSIONS'] = config.ALLOWED_EXTENSIONS
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MODEL_FOLDER'] = 'models'
+app.config['ALLOWED_EXTENSIONS'] = {'csv'}
+app.config['STATIC_FOLDER'] = 'static'
+
+# Garantir a criação das pastas necessárias
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['STATIC_FOLDER'], exist_ok=True)
+
+# Função auxiliar para verificar arquivos permitidos
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+# Definição do formulário
+class ModelForm(FlaskForm):
+    model_type = SelectField('Selecione o Modelo', choices=[
+        ('Decision Tree', 'Decision Tree'),
+        ('Random Forest', 'Random Forest')
+    ])
+    param = IntegerField('Parâmetro', validators=[DataRequired()])
+    submit = SubmitField('Treinar Modelo')
 
 # Página de upload
 @app.route('/', methods=['GET', 'POST'])
@@ -33,15 +55,17 @@ def upload_file():
 
         if file and allowed_file(file.filename):
             filename = file.filename
-            filepath = os.path.join(app.config.get('UPLOAD_FOLDER', './uploads'), filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
 
-            df = pd.read_csv(filepath)
-
-            # Validação das colunas
-            expected_columns = ['marca', 'modelo', 'ano', 'preco', 'quilometragem', 'cidade', 'estado', 'latitude', 'longitude']
-            if not set(expected_columns).issubset(df.columns):
-                flash('As colunas do arquivo não correspondem ao esperado.')
+            try:
+                df = pd.read_csv(filepath)
+                expected_columns = ['marca', 'modelo', 'ano', 'preco', 'quilometragem', 'cidade', 'estado', 'latitude', 'longitude']
+                if not set(expected_columns).issubset(df.columns):
+                    flash('As colunas do arquivo não correspondem ao esperado.')
+                    return redirect(request.url)
+            except Exception as e:
+                flash(f'Erro ao processar arquivo: {str(e)}')
                 return redirect(request.url)
 
             return redirect(url_for('analysis', filename=filename))
@@ -51,52 +75,42 @@ def upload_file():
     return render_template('upload.html')
 
 # Página de análise
-from flask import Flask, render_template, request, flash
-import os
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score
-from sklearn.preprocessing import StandardScaler
-
 @app.route('/analysis/<filename>', methods=['GET', 'POST'])
 def analysis(filename):
-    filepath = os.path.join(app.config.get('UPLOAD_FOLDER', './uploads'), filename)
-    df = pd.read_csv(filepath)
-    
-    df = df.dropna()
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    try:
+        df = pd.read_csv(filepath)
+        df.dropna(inplace=True)
 
-    df['marca'] = df['marca'].astype(str)
-    df['modelo'] = df['modelo'].astype(str)
-    df['cidade'] = df['cidade'].astype(str)
-    df['quilometragem'] = df['quilometragem'].astype(int)
-    df['estado'] = df['estado'].astype(str)
-    df['preco'] = df['preco'].astype(float)
-    df['ano'] = df['ano'].astype(int)
+        df['marca'] = df['marca'].astype(str)
+        df['modelo'] = df['modelo'].astype(str)
+        df['cidade'] = df['cidade'].astype(str)
+        df['quilometragem'] = pd.to_numeric(df['quilometragem'], errors='coerce')
+        df['estado'] = df['estado'].astype(str)
+        df['preco'] = pd.to_numeric(df['preco'], errors='coerce')
+        df['ano'] = pd.to_numeric(df['ano'], errors='coerce')
+    except Exception as e:
+        flash(f'Erro ao processar os dados: {str(e)}')
+        return redirect(url_for('upload_file'))
 
-    # Normalizar a variável quilometragem
     scaler = StandardScaler()
     df['quilometragem'] = scaler.fit_transform(df[['quilometragem']])
 
-    # Gráfico 1: Distribuição por Marca
+    # Gráficos e análise
     plt.figure(figsize=(10, 6))
     sns.countplot(data=df, x='marca', order=df['marca'].value_counts().index)
     plt.xticks(rotation=45)
     plt.title('Distribuição por Marca')
-    bar_chart_path1 = os.path.join('static', 'bar_chart1.png')
+    bar_chart_path1 = os.path.join(app.config['STATIC_FOLDER'], 'bar_chart1.png')
     plt.savefig(bar_chart_path1)
     plt.close()
 
-    # Gráfico 2: Distribuição por Estado
+    # Segundo gráfico
     plt.figure(figsize=(10, 6))
     sns.countplot(data=df, x='estado', order=df['estado'].value_counts().index)
     plt.xticks(rotation=45)
     plt.title('Distribuição por Estado')
-    bar_chart_path2 = os.path.join('static', 'bar_chart2.png')
+    bar_chart_path2 = os.path.join(app.config['STATIC_FOLDER'], 'bar_chart2.png')
     plt.savefig(bar_chart_path2)
     plt.close()
 
@@ -111,7 +125,6 @@ def analysis(filename):
         height=500
     )
     fig.update_layout(mapbox_style="open-street-map")
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     map_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
 
     form = ModelForm()
@@ -119,39 +132,26 @@ def analysis(filename):
     score = None
 
     if request.method == 'POST' and form.validate_on_submit():
-        # Preparação dos dados
         X = df[['marca', 'modelo', 'ano', 'quilometragem']]
         y = df['preco']
-
-        # One-hot encoding
         X = pd.get_dummies(X, columns=['marca', 'modelo'])
-
-        # Divisão dos dados
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-        param = form.param.data
+        param_value = form.param.data
 
         if form.model_type.data == 'Decision Tree':
-            # Usando GridSearchCV para encontrar a melhor profundidade
-            param_grid = {'max_depth': range(1, 21)}
-            grid_search = GridSearchCV(DecisionTreeRegressor(random_state=42), param_grid, cv=5)
-            grid_search.fit(X_train, y_train)
-            model = grid_search.best_estimator_
+            model = DecisionTreeRegressor(max_depth=param_value, random_state=42)
+            model.fit(X_train, y_train)
         elif form.model_type.data == 'Random Forest':
-            model = RandomForestRegressor(n_estimators=100, random_state=42)
+            model = RandomForestRegressor(n_estimators=param_value, random_state=42)
+            model.fit(X_train, y_train)
+        else:
+            flash('Modelo inválido selecionado.')
+            return redirect(url_for('analysis', filename=filename))
 
-        # Treinamento do modelo
-        model.fit(X_train, y_train)
-
-        # Avaliação do modelo
         y_pred = model.predict(X_test)
         score = r2_score(y_test, y_pred)
-        print(f'R²: {score}')
-
         model_trained = True
-    else:
-        if form.errors:
-            flash(form.errors)
 
     return render_template(
         'analysis.html',
@@ -165,10 +165,4 @@ def analysis(filename):
     )
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
-# Início do servidor
-if __name__ == '__main__':
     app.run(debug=True)

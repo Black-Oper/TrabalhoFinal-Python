@@ -6,6 +6,12 @@ body {
     color: #f4f4f4;
 }
 
+h2 {
+    font-size: 18px;
+    margin-top: 32px;
+    font-weight: 400;
+}
+
 /* Estilizando a barra de rolagem (Webkit-based browsers como Chrome, Edge e Safari) */
 ::-webkit-scrollbar {
     width: 8px; /* Largura da barra de rolagem */
@@ -134,7 +140,7 @@ form {
     max-width: 550px;
     width: 100%;
     height: 100%;
-    max-height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
 }
 
@@ -153,7 +159,7 @@ form {
     justify-content: start;
     align-items: start;
     width: 50%;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 #parte_direita h1 {
@@ -196,6 +202,12 @@ form {
 
 #parte_baixo {
     display: flex;
+}
+
+#parte_baixo small {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #a1a1a1;
 }
 
 .form-group {
@@ -261,5 +273,27 @@ form {
 }
 
 #ir_previsao {
-    
+    display: flex;
+    color: #f4f4f4;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-style: none;
+    text-decoration: none;
+    width: 90%;
+    margin-top: 20px;
+    border-radius: 8px;
+    height: 50px;
+    opacity: 0.7;
+    border: 1px solid #2ec2cd;
+    cursor: pointer;
+}
+
+#ir_previsao:hover {
+    opacity: 1;
+    transition: 0.3s;
+}
+
+#ir_previsao img {
+    width: 30px;
 }

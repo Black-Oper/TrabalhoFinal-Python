@@ -88,9 +88,13 @@
         {% endif %}
 
         <!-- analysis.html -->
-        <a id="ir_previsao" href="{{ url_for('predict') }}" class="btn btn-primary"
-          >Ir para Previsão</a
-        >
+        <a
+          id="ir_previsao"
+          href="{{ url_for('predict') }}"
+          class="btn btn-primary"
+          >Ir para Previsão
+          <img src="{{ url_for('static', filename='img/grafico-preditivo.png') }}"
+        /></a>
       </div>
     </div>
   </body>

@@ -17,6 +17,11 @@
       href="{{ url_for('static', filename='css/analysis.css') }}"
     />
 
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
+
     <title>Análise de Dados</title>
   </head>
   <body>
@@ -93,9 +98,16 @@
           href="{{ url_for('predict') }}"
           class="btn btn-primary"
           >Ir para Previsão
-          <img src="{{ url_for('static', filename='img/grafico-preditivo.png') }}"
+          <img
+            src="{{ url_for('static', filename='img/grafico-preditivo.png') }}"
         /></a>
       </div>
     </div>
+
+    <footer>
+      <p>Upload File</p>
+      <p id="ativo" class="meio">Analysis</p>
+      <p>Predict</p>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,32 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    border-top: 1px solid #a1a1a1a6;
+    color: #a1a1a1;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #000000f3;
+
+}
+
+footer p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 0px;
+    padding-top: 15px;
+    width: 30%;
+}
+
+footer #ativo {
+    color: #f4f4f4;
+    border-top: 1px solid #fff;
+}

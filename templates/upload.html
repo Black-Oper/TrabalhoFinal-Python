@@ -17,13 +17,16 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/upload.css') }}"
     />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
   </head>
   <body>
     <div class="container">
       <div id="parte_esquerda">
-        <img
-          src="{{ url_for('static', filename='img/carroMain.jpg') }}"
-        />
+        <img src="{{ url_for('static', filename='img/carroMain.jpg') }}" />
       </div>
       <div id="parte_direita">
         <h1>Upload de Dados</h1>
@@ -57,5 +60,11 @@
         </form>
       </div>
     </div>
+
+    <footer>
+      <p id="ativo">Upload File</p>
+      <p class="meio">Analysis</p>
+      <p>Predict</p>
+    </footer>
   </body>
 </html>

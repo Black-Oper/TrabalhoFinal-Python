@@ -15,14 +15,18 @@
     <!-- Incluindo o CSS dentro de static/css -->
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/upload.css') }}"
+      href="{{ url_for('static', filename='css/predict.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
     />
     <title>Predict</title>
   </head>
   <body>
     <div class="container">
       <div id="parte_esquerda">
-        <img src="{{ url_for('static', filename='img/carroMain.jpg') }}" />
+        <img src="{{ url_for('static', filename='img/predictCar.jpg') }}" />
       </div>
       <div id="parte_direita">
         <h1>Previsão de Preço de Venda</h1>
@@ -52,14 +56,20 @@
           <div class="form-group">
             {{ form.owner.label }} {{ form.owner(class="form-control") }}
           </div>
-          <div class="form-group">
+          <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-primary") }}
           </div>
         </form>
         {% if prediction %}
-        <h2>Preço Previsto: R$ {{ prediction | round(2) }}</h2>
+        <h2 id="preco_previsto">Preço Previsto: R$ {{ prediction | round(2) }}</h2>
         {% endif %}
       </div>
     </div>
+
+    <footer>
+        <p>Upload File</p>
+        <p class="meio">Analysis</p>
+        <p id="ativo">Predict</p>
+    </footer>
   </body>
 </html>

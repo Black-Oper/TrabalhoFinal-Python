@@ -1,52 +1,81 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Incluindo a Fonte Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Incluindo o CSS dentro de static/css -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/analysis.css') }}"
+    />
+
     <title>Análise de Dados</title>
-</head>
-<body>
-<div class="container">
-    <h1>Análise de Dados</h1>
+  </head>
+  <body>
+    <div class="container">
+      <div class="container">
+        <div id="parte_esquerda">
+          <h1>Análise de Dados</h1>
 
-    <h2>Gráfico de Barras - Distribuição por Marca</h2>
-    <img src="{{ url_for('static', filename=bar_chart_url1) }}" alt="Gráfico de Barras" class="img-fluid">
+          <h2>Gráfico de Barras - Distribuição por Marca</h2>
+          <img
+            src="{{ url_for('static', filename=bar_chart_url1) }}"
+            alt="Gráfico de Barras"
+            class="img-fluid"
+          />
 
-    <h2>Gráfico de Barras - Distribuição por Ano</h2>
-    <img src="{{ url_for('static', filename=bar_chart_url2) }}" alt="Gráfico de Barras" class="img-fluid">
+          <h2>Gráfico de Barras - Distribuição por Ano</h2>
+          <img
+            src="{{ url_for('static', filename=bar_chart_url2) }}"
+            alt="Gráfico de Barras"
+            class="img-fluid"
+          />
+        </div>
+      </div>
 
-    <h2>Treinamento de Modelo</h2>
-    <form method="POST">
+      <h2>Treinamento de Modelo</h2>
+      <form method="POST">
         {{ form.hidden_tag() }}
         <div class="form-group">
-            <label for="model_type">{{ form.model_type.label.text }}</label>
-            {{ form.model_type(class="form-control", id="model_type") }}
+          <label for="model_type">{{ form.model_type.label.text }}</label>
+          {{ form.model_type(class="form-control", id="model_type") }}
         </div>
         <div class="form-group">
-            <label for="param">{{ form.param.label.text }}</label>
-            {{ form.param(class="form-control", id="param") }}
-            <small>
-                Para Decision Tree, este é o 'max_depth'.
-                Para Random Forest e Gradient Boosting, este é o 'n_estimators'.
-            </small>
-            {% for error in form.param.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
+          <label for="param">{{ form.param.label.text }}</label>
+          {{ form.param(class="form-control", id="param") }}
+          <small>
+            Para Decision Tree, este é o 'max_depth'. Para Random Forest e
+            Gradient Boosting, este é o 'n_estimators'.
+          </small>
+          {% for error in form.param.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-success") }}
-        </div>
-    </form>
+        <div class="form-group">{{ form.submit(class="btn btn-success") }}</div>
+      </form>
 
-    {% if model_trained %}
-    <h3>Resultados do Modelo</h3>
-    <p>R²: {{ metrics['R2'] | round(4) }}</p>
-    <p>MSE: {{ metrics['MSE'] | round(4) }}</p>
-    <p>MAE: {{ metrics['MAE'] | round(4) }}</p>
-    <p>Média R² (Validação Cruzada): {{ metrics['CV R2 Mean'] | round(4) }}</p>
-    {% endif %}
+      {% if model_trained %}
+      <h3>Resultados do Modelo</h3>
+      <p>R²: {{ metrics['R2'] | round(4) }}</p>
+      <p>MSE: {{ metrics['MSE'] | round(4) }}</p>
+      <p>MAE: {{ metrics['MAE'] | round(4) }}</p>
+      <p>
+        Média R² (Validação Cruzada): {{ metrics['CV R2 Mean'] | round(4) }}
+      </p>
+      {% endif %}
 
-    <!-- analysis.html -->
-    <a href="{{ url_for('predict') }}" class="btn btn-primary">Ir para Previsão</a>
-</div>
-</body>
+      <!-- analysis.html -->
+      <a href="{{ url_for('predict') }}" class="btn btn-primary"
+        >Ir para Previsão</a
+      >
+    </div>
+  </body>
 </html>

@@ -1,21 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Upload de Arquivo</title>
-</head>
-<body>
-<div class="container">
-    <h1>Upload de Dados</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            <input type="file" name="file" class="form-control">
-        </div>
-        <div class="form-group">
+
+    <!-- Incluindo a Fonte Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Incluindo o CSS dentro de static/css -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/upload.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div id="parte_esquerda">
+        <img src="{{ url_for('static', filename='img/carroMain.jpg') }}" />
+      </div>
+      <div id="parte_direita">
+        <h1>Upload de Dados</h1>
+        <p>
+          Para realizar a análise de dados, é necessário que você envie um
+          arquivo no formato CSV contendo as informações que serão processadas.
+          Certifique-se de que o arquivo está devidamente organizado, com
+          colunas claras e dados estruturados. Ao fazer o upload, nossa
+          ferramenta iniciará o processamento, identificando padrões, gerando
+          insights e apresentando resultados que atendam às suas necessidades de
+          forma eficiente e precisa.
+        </p>
+        <form method="POST" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label for="file-input" class="upload-div">
+              <img
+                src="{{ url_for('static', filename='img/documentos.png') }}"
+              />
+            </label>
+            <input
+              id="file-input"
+              type="file"
+              name="file"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-primary") }}
-        </div>
-    </form>
-</div>
-</body>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <p id="ativo">Upload File</p>
+      <p class="meio">Analysis</p>
+      <p>Predict</p>
+    </footer>
+  </body>
 </html>

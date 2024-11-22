@@ -1,0 +1,301 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    padding: 0px;
+    margin: 0px;
+    background-color: #000000;
+    color: #f4f4f4;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 32px;
+    font-weight: 400;
+}
+
+/* Estilizando a barra de rolagem (Webkit-based browsers como Chrome, Edge e Safari) */
+::-webkit-scrollbar {
+    width: 8px; /* Largura da barra de rolagem */
+    background: #1a1a1a; /* Fundo da barra em cinza-escuro */
+}
+
+/* Parte "deslizante" da barra de rolagem */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #39b4c1, #2a8f97, #39b4c1); /* Gradiente suave */
+    border-radius: 10px; /* Arredondamento */
+    box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97; /* Brilho sutil */
+}
+
+/* Parte ao redor da barra de rolagem */
+::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Fundo do track em cinza-escuro */
+    border-radius: 10px; /* Arredondamento */
+    box-shadow: inset 0 0 5px #2a8f97; /* Efeito de brilho interno sutil */
+}
+
+/* Animação para o efeito de "pulsar" */
+@keyframes scroll-pulse {
+    0% {
+        box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97;
+    }
+    50% {
+        box-shadow: 0 0 10px #39b4c1, 0 0 15px #2a8f97;
+    }
+    100% {
+        box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97;
+    }
+}
+
+/* Aplicando a animação na parte deslizante */
+::-webkit-scrollbar-thumb {
+    animation: scroll-pulse 3s infinite;
+}
+
+
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+#parte_cima {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 100vh;
+}
+
+#parte_direita_cima {
+    max-width: 550px;
+    width: 100%;
+    min-height: 90vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+#parte_esquerda_cima {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    margin-left: 50px;
+    width: 50%;
+    min-height: 80vh;
+}
+
+#parte_esquerda_cima h1 {
+    font-size: 50px;
+    font-weight: 300;
+    margin-bottom: 0px;
+}
+
+
+#parte_esquerda_cima p {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 22px;
+    color: #a1a1a1;
+}
+
+/* #parte_esquerda_cima img {
+    cursor: pointer;
+    width: 50%;
+    border-radius: 8px;
+} */
+
+#parte_esquerda_cima img:hover {
+    box-shadow: 0 4px 8px #2ec2cdb4;
+    transition: 0.3s;
+}
+
+.campo_img {
+    width: 100%;
+    height: 200px;
+    overflow: auto; /* Permite rolagem */
+    border-radius: 4px;
+}
+
+.campo_img img {
+    border-radius: 4px;
+    width: auto; /* Mantém a largura original da imagem */
+    height: auto; /* Mantém a altura original da imagem */
+    max-width: 100%; /* Para que a imagem não ultrapasse a largura do contêiner */
+}
+
+#parte_direita_cima img {
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 4px;
+    object-fit: cover;
+}
+
+form {
+    width: 90%;
+}
+
+#parte_esquerda {
+    max-width: 550px;
+    width: 100%;
+    height: 100%;
+    height: 150vh;
+    overflow: hidden;
+}
+
+#parte_baixo img {
+    border-top-right-radius: 4px !important;
+}
+
+#parte_esquerda img {
+    border-top-right-radius: 4px !important;
+}
+
+#parte_direita {
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 50%;
+    min-height: 100vh;
+    margin-top: 100px;
+}
+
+#parte_direita h1 {
+    font-size: 50px;
+    font-weight: 300;
+    margin-bottom: 0px;
+}
+
+#parte_direita p {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 22px;
+    color: #a1a1a1;
+}
+
+#divisor {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(90deg, #2ec2cd, #000, #2ec2cd); /* Gradiente futurista */
+    box-shadow: 0 0 15px #2ec2cd, 0 0 30px #000; /* Efeito de brilho */
+    animation: pulse 3s infinite; /* Animação suave */
+}
+
+/* Animação do brilho */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 10px #2ec2cd, 0 0 20px #000;
+    }
+    50% {
+        box-shadow: 0 0 20px #2ec2cd, 0 0 40px #000;
+    }
+    100% {
+        box-shadow: 0 0 10px #2ec2cd, 0 0 20px #000;
+    }
+}
+
+
+#parte_baixo {
+    display: flex;
+}
+
+#parte_baixo small {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #a1a1a1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    margin-top: 20px;
+
+}
+
+.form-group label {
+    margin-bottom: 10px;
+}
+
+.form-group select {
+    width: 100%;
+    height: 50px;
+    background-color: #000;
+    border: 1px solid #2ec2cd;
+    border-radius: 8px;
+    color: #f4f4f4;
+}
+
+.form-group input {
+    width: 99%;
+    height: 50px;
+    background-color: #000;
+    border: 1px solid #2ec2cd;
+    border-radius: 8px;
+    color: #f4f4f4;
+}
+
+#botao_env {
+    justify-self: center;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#botao_env input {
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    width: 100%;
+    background-color: #2EC3CD;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fafafa;
+    margin-top: 20px;
+    height: 50px;
+    padding: 0px 50px;
+}
+
+#botao_env input:hover {
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+#ir_previsao {
+    display: flex;
+    color: #f4f4f4;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-style: none;
+    text-decoration: none;
+    width: 90%;
+    margin-top: 20px;
+    border-radius: 8px;
+    height: 50px;
+    opacity: 0.7;
+    border: 1px solid #2ec2cd;
+    cursor: pointer;
+}
+
+#ir_previsao:hover {
+    opacity: 1;
+    transition: 0.3s;
+}
+
+#ir_previsao img {
+    width: 30px;
+}

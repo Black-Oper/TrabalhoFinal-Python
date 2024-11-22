@@ -1,48 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Previsão de Preço de Venda</h1>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.brand.label }}
-            {{ form.brand(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.age.label }}
-            {{ form.age(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.km_driven.label }}
-            {{ form.km_driven(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.fuel.label }}
-            {{ form.fuel(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.transmission.label }}
-            {{ form.transmission(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.seller_type.label }}
-            {{ form.seller_type(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.owner.label }}
-            {{ form.owner(class="form-control") }}
-        </div>
-        <div class="form-group">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Incluindo a Fonte Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Handlee&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Incluindo o CSS dentro de static/css -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/predict.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/footer.css') }}"
+    />
+    <title>Predict</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="parte_esquerda">
+        <img src="{{ url_for('static', filename='img/predictCar.jpg') }}" />
+      </div>
+      <div id="parte_direita">
+        <h1>Previsão de Preço de Venda</h1>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.brand.label }} {{ form.brand(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ form.age.label }} {{ form.age(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ form.km_driven.label }} {{ form.km_driven(class="form-control")
+            }}
+          </div>
+          <div class="form-group">
+            {{ form.fuel.label }} {{ form.fuel(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ form.transmission.label }} {{
+            form.transmission(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ form.seller_type.label }} {{
+            form.seller_type(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ form.owner.label }} {{ form.owner(class="form-control") }}
+          </div>
+          <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-primary") }}
-        </div>
-    </form>
-    {% if prediction %}
-        <h2>Preço Previsto: R$ {{ prediction | round(2) }}</h2>
-    {% endif %}
-</body>
+          </div>
+        </form>
+        {% if prediction %}
+        <h2 id="preco_previsto">Preço Previsto: R$ {{ prediction | round(2) }}</h2>
+        {% endif %}
+      </div>
+    </div>
+
+    <footer>
+        <p>Upload File</p>
+        <p class="meio">Analysis</p>
+        <p id="ativo">Predict</p>
+    </footer>
+  </body>
 </html>

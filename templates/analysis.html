@@ -21,61 +21,77 @@
   </head>
   <body>
     <div class="container">
-      <div class="container">
-        <div id="parte_esquerda">
+      <div id="parte_cima">
+        <div id="parte_esquerda_cima">
           <h1>Análise de Dados</h1>
 
           <h2>Gráfico de Barras - Distribuição por Marca</h2>
-          <img
-            src="{{ url_for('static', filename=bar_chart_url1) }}"
-            alt="Gráfico de Barras"
-            class="img-fluid"
-          />
+          <div class="campo_img">
+            <img
+              src="{{ url_for('static', filename=bar_chart_url1) }}"
+              alt="Gráfico de Barras"
+            />
+          </div>
 
           <h2>Gráfico de Barras - Distribuição por Ano</h2>
-          <img
-            src="{{ url_for('static', filename=bar_chart_url2) }}"
-            alt="Gráfico de Barras"
-            class="img-fluid"
-          />
+          <div class="campo_img">
+            <img
+              src="{{ url_for('static', filename=bar_chart_url2) }}"
+              alt="Gráfico de Barras"
+            />
+          </div>
+        </div>
+        <div id="parte_direita_cima">
+          <img src="{{ url_for('static', filename='img/carroAnalise.jpg') }}" />
         </div>
       </div>
+    </div>
 
-      <h2>Treinamento de Modelo</h2>
-      <form method="POST">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-          <label for="model_type">{{ form.model_type.label.text }}</label>
-          {{ form.model_type(class="form-control", id="model_type") }}
-        </div>
-        <div class="form-group">
-          <label for="param">{{ form.param.label.text }}</label>
-          {{ form.param(class="form-control", id="param") }}
-          <small>
-            Para Decision Tree, este é o 'max_depth'. Para Random Forest e
-            Gradient Boosting, este é o 'n_estimators'.
-          </small>
-          {% for error in form.param.errors %}
-          <span class="text-danger">{{ error }}</span>
-          {% endfor %}
-        </div>
-        <div class="form-group">{{ form.submit(class="btn btn-success") }}</div>
-      </form>
+    <div id="divisor"></div>
 
-      {% if model_trained %}
-      <h3>Resultados do Modelo</h3>
-      <p>R²: {{ metrics['R2'] | round(4) }}</p>
-      <p>MSE: {{ metrics['MSE'] | round(4) }}</p>
-      <p>MAE: {{ metrics['MAE'] | round(4) }}</p>
-      <p>
-        Média R² (Validação Cruzada): {{ metrics['CV R2 Mean'] | round(4) }}
-      </p>
-      {% endif %}
+    <div id="parte_baixo">
+      <div id="parte_esquerda">
+        <img src="{{ url_for('static', filename='img/carroAnalise2.jpg') }}" />
+      </div>
+      <div id="parte_direita">
+        <h1>Treinamento de Modelo</h1>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label for="model_type">{{ form.model_type.label.text }}</label>
+            {{ form.model_type(class="form-control", id="model_type") }}
+          </div>
+          <div class="form-group">
+            <label for="param">{{ form.param.label.text }}</label>
+            {{ form.param(class="form-control", id="param") }}
+            <small>
+              Para Decision Tree, este é o 'max_depth'. Para Random Forest e
+              Gradient Boosting, este é o 'n_estimators'.
+            </small>
+            {% for error in form.param.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group" id="botao_env">
+            {{ form.submit(class="btn btn-success") }}
+          </div>
+        </form>
 
-      <!-- analysis.html -->
-      <a href="{{ url_for('predict') }}" class="btn btn-primary"
-        >Ir para Previsão</a
-      >
+        {% if model_trained %}
+        <h3>Resultados do Modelo</h3>
+        <p>R²: {{ metrics['R2'] | round(4) }}</p>
+        <p>MSE: {{ metrics['MSE'] | round(4) }}</p>
+        <p>MAE: {{ metrics['MAE'] | round(4) }}</p>
+        <p>
+          Média R² (Validação Cruzada): {{ metrics['CV R2 Mean'] | round(4) }}
+        </p>
+        {% endif %}
+
+        <!-- analysis.html -->
+        <a id="ir_previsao" href="{{ url_for('predict') }}" class="btn btn-primary"
+          >Ir para Previsão</a
+        >
+      </div>
     </div>
   </body>
 </html>

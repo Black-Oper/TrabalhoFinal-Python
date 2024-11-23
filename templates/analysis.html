@@ -38,14 +38,20 @@
 
           <!-- Gráfico de barras para distribuição por marca -->
           <h2>Gráfico de Barras - Distribuição por Marca</h2>
-          <div class="campo_img">
-            {{ brand_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
+          <div class="chart-container">
+            <div class="expand-icon" onclick="toggleExpand('brand_chart')">⤢</div>
+            <div class="campo_img" id="brand_chart_container">
+              {{ brand_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
+            </div>
           </div>
 
           <!-- Gráfico de barras para distribuição por ano -->
           <h2>Gráfico de Barras - Distribuição por Ano</h2>
-          <div class="campo_img">
-            {{ year_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
+          <div class="chart-container">
+            <div class="expand-icon" onclick="toggleExpand('year_chart')">⤢</div>
+            <div class="campo_img" id="year_chart_container">
+              {{ year_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
+            </div>
           </div>
         </div>
         <!-- Divisão direita com uma imagem -->
@@ -127,5 +133,15 @@
       <p id="ativo" class="meio">Analysis</p>
       <p>Predict</p>
     </footer>
+    <script>
+      function toggleExpand(chartId) {
+        const chartContainer = document.getElementById(chartId + '_container');
+        if (chartContainer.classList.contains('expanded')) {
+          chartContainer.classList.remove('expanded');
+        } else {
+          chartContainer.classList.add('expanded');
+        }
+      }
+    </script>
   </body>
 </html>

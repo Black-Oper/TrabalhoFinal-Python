@@ -57,12 +57,12 @@ def generate_interactive_plots(df):
     brand_counts = df['name'].str.split().str[0].value_counts().reset_index()  # Conta as ocorrências de cada marca
     brand_counts.columns = ['Brand', 'Count']  # Renomeia as colunas
     fig1 = px.bar(brand_counts, x='Brand', y='Count', title='Distribuição por Marca')  # Cria o gráfico interativo
-    brand_chart = fig1.to_html(full_html=False)  # Converte o gráfico para HTML (parcial)
+    brand_chart = fig1.to_html(full_html=False, include_plotlyjs='cdn', div_id='brand_chart')  # Converte o gráfico para HTML (parcial)
 
     # Gráfico de barras: distribuição por ano
     year_counts = df['year'].value_counts().reset_index()  # Conta as ocorrências de cada ano
     year_counts.columns = ['Year', 'Count']  # Renomeia as colunas
     fig2 = px.bar(year_counts, x='Year', y='Count', title='Distribuição por Ano')  # Cria o gráfico interativo
-    year_chart = fig2.to_html(full_html=False)  # Converte o gráfico para HTML (parcial)
+    year_chart = fig2.to_html(full_html=False, include_plotlyjs='cdn', div_id='year_chart')  # Converte o gráfico para HTML (parcial)
 
     return brand_chart, year_chart  # Retorna os gráficos em formato HTML

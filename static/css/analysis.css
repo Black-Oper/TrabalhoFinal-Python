@@ -12,27 +12,27 @@ h2 {
     font-weight: 400;
 }
 
-/* Estilizando a barra de rolagem (Webkit-based browsers como Chrome, Edge e Safari) */
+
 ::-webkit-scrollbar {
-    width: 8px; /* Largura da barra de rolagem */
-    background: #1a1a1a; /* Fundo da barra em cinza-escuro */
+    width: 8px; 
+    background: #1a1a1a; 
 }
 
-/* Parte "deslizante" da barra de rolagem */
+
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, #39b4c1, #2a8f97, #39b4c1); /* Gradiente suave */
-    border-radius: 10px; /* Arredondamento */
-    box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97; /* Brilho sutil */
+    background: linear-gradient(90deg, #39b4c1, #2a8f97, #39b4c1); 
+    border-radius: 10px; 
+    box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97;
 }
 
-/* Parte ao redor da barra de rolagem */
+
 ::-webkit-scrollbar-track {
-    background: #1a1a1a; /* Fundo do track em cinza-escuro */
-    border-radius: 10px; /* Arredondamento */
-    box-shadow: inset 0 0 5px #2a8f97; /* Efeito de brilho interno sutil */
+    background: #1a1a1a; 
+    border-radius: 10px; 
+    box-shadow: inset 0 0 5px #2a8f97; 
 }
 
-/* Animação para o efeito de "pulsar" */
+
 @keyframes scroll-pulse {
     0% {
         box-shadow: 0 0 5px #39b4c1, 0 0 10px #2a8f97;
@@ -45,7 +45,6 @@ h2 {
     }
 }
 
-/* Aplicando a animação na parte deslizante */
 ::-webkit-scrollbar-thumb {
     animation: scroll-pulse 3s infinite;
 }
@@ -115,15 +114,15 @@ h2 {
 .campo_img {
     width: 100%;
     height: 200px;
-    overflow: auto; /* Permite rolagem */
+    overflow: auto;
     border-radius: 4px;
 }
 
-.campo_img img {
+.campo_img iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
     border-radius: 4px;
-    width: auto; /* Mantém a largura original da imagem */
-    height: auto; /* Mantém a altura original da imagem */
-    max-width: 100%; /* Para que a imagem não ultrapasse a largura do contêiner */
 }
 
 #parte_direita_cima img {

@@ -32,18 +32,12 @@
 
           <h2>Gráfico de Barras - Distribuição por Marca</h2>
           <div class="campo_img">
-            <img
-              src="{{ url_for('static', filename=bar_chart_url1) }}"
-              alt="Gráfico de Barras"
-            />
+            {{ brand_chart | safe }}
           </div>
 
           <h2>Gráfico de Barras - Distribuição por Ano</h2>
           <div class="campo_img">
-            <img
-              src="{{ url_for('static', filename=bar_chart_url2) }}"
-              alt="Gráfico de Barras"
-            />
+            {{ year_chart | safe }}
           </div>
         </div>
         <div id="parte_direita_cima">
@@ -92,7 +86,6 @@
         </p>
         {% endif %}
 
-        <!-- analysis.html -->
         <a
           id="ir_previsao"
           href="{{ url_for('predict') }}"

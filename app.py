@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
-from utils import app, allowed_file, load_model, save_model, prepare_dataset
+from utils import app, allowed_file, load_model, save_model, prepare_dataset, generate_interactive_plots
 from Forms import UploadForm, ModelForm, PredictionForm
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -52,21 +52,7 @@ def analysis():
     metrics = None
     model_trained = False
 
-    # Distribuição por marca
-    brand_counts = df['name'].str.split().str[0].value_counts()
-    plt.figure(figsize=(10,6))
-    brand_counts.plot(kind='bar')
-    bar_chart_url1 = 'bar_chart_brand.png'
-    plt.savefig(os.path.join('static', bar_chart_url1))
-    plt.close()
-
-    # Distribuição por ano
-    year_counts = df['year'].value_counts()
-    plt.figure(figsize=(10,6))
-    year_counts.plot(kind='bar')
-    bar_chart_url2 = 'bar_chart_year.png'
-    plt.savefig(os.path.join('static', bar_chart_url2))
-    plt.close()
+    brand_chart, year_chart = generate_interactive_plots(df)
 
     df, scaler = prepare_dataset(df)
     X = df.drop('selling_price', axis=1)
@@ -105,7 +91,7 @@ def analysis():
         model_trained = True
 
     return render_template('analysis.html', form=form, metrics=metrics, model_trained=model_trained,
-                           bar_chart_url1=bar_chart_url1, bar_chart_url2=bar_chart_url2)
+                           brand_chart=brand_chart, year_chart=year_chart)
 
 @app.route('/predict', methods=['GET', 'POST'])
 def predict():

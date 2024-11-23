@@ -4,6 +4,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import plotly.express as px
 
 
 app = Flask(__name__)
@@ -39,4 +40,18 @@ def prepare_dataset(df):
     scaler = StandardScaler()
     df[['age', 'km_driven']] = scaler.fit_transform(df[['age', 'km_driven']])
     return df, scaler
+
+def generate_interactive_plots(df):
+    
+    brand_counts = df['name'].str.split().str[0].value_counts().reset_index()
+    brand_counts.columns = ['Brand', 'Count']
+    fig1 = px.bar(brand_counts, x='Brand', y='Count', title='Distribuição por Marca')
+    brand_chart = fig1.to_html(full_html=False)
+
+    year_counts = df['year'].value_counts().reset_index()
+    year_counts.columns = ['Year', 'Count']
+    fig2 = px.bar(year_counts, x='Year', y='Count', title='Distribuição por Ano')
+    year_chart = fig2.to_html(full_html=False)
+
+    return brand_chart, year_chart
 

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
+    <!-- Configuração de codificação de caracteres -->
     <meta charset="UTF-8" />
 
-    <!-- Incluindo a Fonte Montserrat -->
+    <!-- Importando a fonte Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -11,58 +12,73 @@
       rel="stylesheet"
     />
 
+    <!-- Adicionando um favicon -->
     <link rel="icon" href="{{ url_for('static', filename='img/corrida.png') }}" type="image/png">
 
-
-    <!-- Incluindo o CSS dentro de static/css -->
+    <!-- Importando arquivos CSS -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/analysis.css') }}"
     />
-
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/footer.css') }}"
     />
 
+    <!-- Título da página -->
     <title>Análise de Dados</title>
   </head>
   <body>
     <div class="container">
+      <!-- Seção superior -->
       <div id="parte_cima">
+        <!-- Divisão esquerda com gráficos -->
         <div id="parte_esquerda_cima">
           <h1>Análise de Dados</h1>
 
+          <!-- Gráfico de barras para distribuição por marca -->
           <h2>Gráfico de Barras - Distribuição por Marca</h2>
           <div class="campo_img">
-            {{ brand_chart | safe }}
+            {{ brand_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
           </div>
 
+          <!-- Gráfico de barras para distribuição por ano -->
           <h2>Gráfico de Barras - Distribuição por Ano</h2>
           <div class="campo_img">
-            {{ year_chart | safe }}
+            {{ year_chart | safe }} <!-- Inserção do gráfico gerado pelo backend -->
           </div>
         </div>
+        <!-- Divisão direita com uma imagem -->
         <div id="parte_direita_cima">
           <img src="{{ url_for('static', filename='img/carroAnalise.jpg') }}" />
         </div>
       </div>
     </div>
 
+    <!-- Divisor visual -->
     <div id="divisor"></div>
 
+    <!-- Seção inferior -->
     <div id="parte_baixo">
+      <!-- Divisão esquerda com outra imagem -->
       <div id="parte_esquerda">
         <img src="{{ url_for('static', filename='img/carroAnalise2.jpg') }}" />
       </div>
+
+      <!-- Divisão direita com o formulário para treinamento do modelo -->
       <div id="parte_direita">
         <h1>Treinamento de Modelo</h1>
         <form method="POST">
+          <!-- Campo oculto para proteção contra ataques CSRF -->
           {{ form.hidden_tag() }}
+
+          <!-- Campo para selecionar o tipo de modelo -->
           <div class="form-group">
             <label for="model_type">{{ form.model_type.label.text }}</label>
             {{ form.model_type(class="form-control", id="model_type") }}
           </div>
+
+          <!-- Campo para os parâmetros do modelo -->
           <div class="form-group">
             <label for="param">{{ form.param.label.text }}</label>
             {{ form.param(class="form-control", id="param") }}
@@ -70,15 +86,19 @@
               Para Decision Tree, este é o 'max_depth'. Para Random Forest e
               Gradient Boosting, este é o 'n_estimators'.
             </small>
+            <!-- Exibindo erros de validação -->
             {% for error in form.param.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
           </div>
+
+          <!-- Botão para submeter o formulário -->
           <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-success") }}
           </div>
         </form>
 
+        <!-- Exibindo os resultados do modelo treinado -->
         {% if model_trained %}
         <h3>Resultados do Modelo</h3>
         <p>R²: {{ metrics['R2'] | round(4) }}</p>
@@ -89,6 +109,7 @@
         </p>
         {% endif %}
 
+        <!-- Link para página de previsão -->
         <a
           id="ir_previsao"
           href="{{ url_for('predict') }}"
@@ -100,6 +121,7 @@
       </div>
     </div>
 
+    <!-- Rodapé -->
     <footer>
       <p>Upload File</p>
       <p id="ativo" class="meio">Analysis</p>

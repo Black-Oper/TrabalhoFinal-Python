@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Incluindo a Fonte Montserrat -->
+    <!-- Incluindo a Fonte Montserrat para estilização -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,9 +12,14 @@
       rel="stylesheet"
     />
 
-    <link rel="icon" href="{{ url_for('static', filename='img/corrida.png') }}" type="image/png">
+    <!-- Favicon que aparece na aba do navegador -->
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/corrida.png') }}"
+      type="image/png"
+    />
 
-    <!-- Incluindo o CSS dentro de static/css -->
+    <!-- Estilos customizados -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/predict.css') }}"
@@ -27,51 +32,90 @@
   </head>
   <body>
     <div class="container">
+      <!-- Parte esquerda com uma imagem -->
       <div id="parte_esquerda">
         <img src="{{ url_for('static', filename='img/predictCar.jpg') }}" />
       </div>
+
+      <!-- Parte direita com o formulário de entrada -->
       <div id="parte_direita">
         <h1>Previsão de Preço de Venda</h1>
+
+        <!-- Formulário para enviar os dados necessários para previsão -->
         <form method="POST">
+          <!-- Campo oculto para proteger o formulário contra ataques CSRF -->
           {{ form.hidden_tag() }}
+
+          <!-- Grupo de formulário para cada atributo -->
           <div class="form-group">
-            {{ form.brand.label }} {{ form.brand(class="form-control") }}
+            {{ form.brand.label }}
+            <!-- Label do campo 'Marca' -->
+            {{ form.brand(class="form-control") }}
+            <!-- Campo de entrada -->
           </div>
+
           <div class="form-group">
-            {{ form.age.label }} {{ form.age(class="form-control") }}
+            {{ form.age.label }}
+            <!-- Label do campo 'Idade do carro' -->
+            {{ form.age(class="form-control") }}
+            <!-- Campo de entrada -->
           </div>
+
           <div class="form-group">
-            {{ form.km_driven.label }} {{ form.km_driven(class="form-control")
-            }}
+            {{ form.km_driven.label }}
+            <!-- Label do campo 'Quilometragem' -->
+            {{ form.km_driven(class="form-control") }}
+            <!-- Campo de entrada -->
           </div>
+
           <div class="form-group">
-            {{ form.fuel.label }} {{ form.fuel(class="form-control") }}
+            {{ form.fuel.label }}
+            <!-- Label do campo 'Tipo de combustível' -->
+            {{ form.fuel(class="form-control") }}
+            <!-- Campo de seleção -->
           </div>
+
           <div class="form-group">
-            {{ form.transmission.label }} {{
-            form.transmission(class="form-control") }}
+            {{ form.transmission.label }}
+            <!-- Label do campo 'Transmissão' -->
+            {{ form.transmission(class="form-control") }}
+            <!-- Campo de seleção -->
           </div>
+
           <div class="form-group">
-            {{ form.seller_type.label }} {{
-            form.seller_type(class="form-control") }}
+            {{ form.seller_type.label }}
+            <!-- Label do campo 'Tipo de vendedor' -->
+            {{ form.seller_type(class="form-control") }}
+            <!-- Campo de seleção -->
           </div>
+
           <div class="form-group">
-            {{ form.owner.label }} {{ form.owner(class="form-control") }}
+            {{ form.owner.label }}
+            <!-- Label do campo 'Quantidade de donos' -->
+            {{ form.owner(class="form-control") }}
+            <!-- Campo de entrada -->
           </div>
+
+          <!-- Botão para submeter o formulário -->
           <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-primary") }}
           </div>
         </form>
+
+        <!-- Se a previsão existir, ela será exibida aqui -->
         {% if prediction %}
-        <h2 id="preco_previsto">Preço Previsto: R$ {{ prediction | round(2) }}</h2>
+        <h2 id="preco_previsto">
+          Preço Previsto: R$ {{ prediction | round(2) }}
+        </h2>
         {% endif %}
       </div>
     </div>
 
+    <!-- Rodapé com links para outras páginas -->
     <footer>
-        <p>Upload File</p>
-        <p class="meio">Analysis</p>
-        <p id="ativo">Predict</p>
+      <p>Upload File</p>
+      <p class="meio">Analysis</p>
+      <p id="ativo">Predict</p>
     </footer>
   </body>
 </html>

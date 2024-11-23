@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Upload de Arquivo</title>
 
-    <!-- Incluindo a Fonte Montserrat -->
+    <!-- Incluindo a Fonte Montserrat, usada para estilizar o texto da página -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,14 +12,18 @@
       rel="stylesheet"
     />
 
-    <link rel="icon" href="{{ url_for('static', filename='img/corrida.png') }}" type="image/png">
+    <!-- Favicon (ícone que aparece na aba do navegador) -->
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/corrida.png') }}"
+      type="image/png"
+    />
 
-    <!-- Incluindo o CSS dentro de static/css -->
+    <!-- Incluindo os arquivos CSS personalizados para estilização -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/upload.css') }}"
     />
-
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/footer.css') }}"
@@ -27,28 +31,32 @@
   </head>
   <body>
     <div class="container">
+      <!-- Divisão esquerda contendo uma imagem -->
       <div id="parte_esquerda">
         <img src="{{ url_for('static', filename='img/carroMain.jpg') }}" />
       </div>
+
+      <!-- Divisão direita contendo o formulário de upload -->
       <div id="parte_direita">
         <h1>Upload de Dados</h1>
         <p>
-          Para realizar a análise de dados, é necessário que você envie um
-          arquivo no formato CSV contendo as informações que serão processadas.
-          Certifique-se de que o arquivo está devidamente organizado, com
-          colunas claras e dados estruturados. Ao fazer o upload, nossa
-          ferramenta iniciará o processamento, identificando padrões, gerando
-          insights e apresentando resultados que atendam às suas necessidades de
-          forma eficiente e precisa.
+          Explica ao usuário que ele deve enviar um arquivo CSV contendo os
+          dados para análise. Também dá instruções sobre como o sistema
+          processará os dados.
         </p>
+
+        <!-- Formulário para upload do arquivo -->
         <form method="POST" enctype="multipart/form-data">
           {{ form.hidden_tag() }}
+          <!-- Div para selecionar o arquivo -->
           <div class="form-group">
             <label for="file-input" class="upload-div">
+              <!-- Imagem do ícone de upload -->
               <img
                 src="{{ url_for('static', filename='img/documentos.png') }}"
               />
             </label>
+            <!-- Campo para selecionar o arquivo -->
             <input
               id="file-input"
               type="file"
@@ -56,6 +64,8 @@
               class="form-control"
             />
           </div>
+
+          <!-- Botão para submeter o formulário -->
           <div class="form-group" id="botao_env">
             {{ form.submit(class="btn btn-primary") }}
           </div>
@@ -63,6 +73,7 @@
       </div>
     </div>
 
+    <!-- Rodapé com navegação -->
     <footer>
       <p id="ativo">Upload File</p>
       <p class="meio">Analysis</p>
